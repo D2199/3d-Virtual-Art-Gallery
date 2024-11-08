@@ -14,9 +14,9 @@ A captivating 3D virtual art gallery experience built with **React Three Fiber**
 * **Frontend:** React, Three.js, React Three Fiber, Babylon.js (Optional, for advanced 3D features)
 * **Backend:** Django, Django REST Framework, PostgreSQL (or other suitable database)
 
-**Getting Started:**
+<!--**Getting Started:**
 
-<!--1. **Clone the Repository:**
+1. **Clone the Repository:**
    ```bash
    git clone [https://github.com/D2199/3d-virtual-art-gallery.git](https://github.com/your-username/3d-virtual-art-gallery.git)
 
