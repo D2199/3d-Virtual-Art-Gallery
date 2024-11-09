@@ -8,7 +8,7 @@ import {
   // Redirect,
 } from "react-router-dom";
 import { authGuard } from "../../services/Auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isAuth } from "../../app/slicers/auth";
 // function PrivateRoute({ children }) {
 //   const Authenticate = async () => await authGuard();
@@ -26,9 +26,11 @@ import { isAuth } from "../../app/slicers/auth";
 
 function PrivateRoute({ children }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [isauth, setIsauth] = useState(true);
+  // const [isauth, setIsauth] = useState(true);
   const dispatcher = useDispatch();
-  console.log(dispatcher(isAuth()));
+
+  const isauth = useSelector((state) => state.auth.value);
+  // console.log(dispatcher(isAuth()));
   // useEffect(() => {
   //   const auth = async () => {
   //     await setIsauth(authGuard());
@@ -41,18 +43,18 @@ function PrivateRoute({ children }) {
   //   console.log(isauth);
   //   return <div>loading...</div>;
   // }
-  const s = async () => await authGuard(setIsauth)();
-  useEffect(() => {
-    // s();
-    authGuard(
-      () => {
-        setIsauth(true);
-      },
-      () => {
-        setIsLoading(false);
-      }
-    );
-  }, []);
+  // const s = async () => await authGuard(setIsauth)();
+  // useEffect(() => {
+  //   // s();
+  //   authGuard(
+  //     () => {
+  //       setIsauth(true);
+  //     },
+  //     () => {
+  //       setIsLoading(false);
+  //     }
+  //   );
+  // }, []);
   // if (isLoading) {
   //   return <>loading</>;
   // }

@@ -12,11 +12,14 @@
   overflow: scroll;
   /* color: white; */
 }
-.form-item {
+.formItem {
   display: flex;
   flex-direction: column;
   padding: 2px;
-  color: rgb(3, 52, 247);
+  color: rgb(247, 247, 248);
+}
+.form-item > label {
+  color: "white";
 }
 details > summary {
   cursor: pointer;
@@ -27,7 +30,12 @@ details > summary {
   margin: 2px;
   color: wheat;
 }
-.rotateInputs > span > input {
+.Inputs3D {
+  display: flex;
+  gap: 10px;
+  margin: 5px;
+}
+.Inputs3D > span > input {
   /* display: flex; */
   width: 5ch;
 }
@@ -36,7 +44,12 @@ details > summary {
   width: 5ch;
 }
 
-input {
+input,
+textarea {
   border-radius: 8px;
+  color: rgb(104, 1, 1);
+  /* background-color: gray; */
+}
+.Inputs {
   color: black;
 }

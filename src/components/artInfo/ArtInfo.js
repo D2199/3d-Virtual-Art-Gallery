@@ -12,6 +12,7 @@ export function ArtInfo({ info }) {
             position: "absolute",
             width: "max-content",
             bottom: 0,
+            maxWidth: "300px",
           }}
         >
           <div className="name card-item">
@@ -19,8 +20,8 @@ export function ArtInfo({ info }) {
             {info.name}
           </div>
           <div className="discription card-item">
-            <label>Discription:</label>
-            {info.discription}
+            <label>Description:</label>
+            {info.description}
           </div>
           <div className="author card-item">
             <label>Author:</label>

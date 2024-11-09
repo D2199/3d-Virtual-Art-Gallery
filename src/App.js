@@ -7,9 +7,11 @@ import Dashboard from "./components/pages/Dashboard";
 import PrivateRoute from "./components/pages/PrivateRoute";
 import Login from "./components/pages/Login";
 import Home from "./components/pages/Home";
-import Gallerys from "./components/pages/Gallerys";
+import Gallery from "./components/pages/Gallery";
 import Navbar from "./components/nav/Navbar";
 import Explore from "./components/pages/Explore";
+import Logout from "./components/pages/logout";
+import Gallerys from "./components/pages/Gallerys";
 
 // import {
 //   OrbitControls,
@@ -29,7 +31,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/index" index element={<Home />} />
-        <Route path="/gallery/:galleryId" element={<Gallerys />} />
+        <Route path="/gallery/:galleryId" element={<Gallery />} />
         <Route path="/explore" element={<Explore />} />
         {/* <Route
           path="/dashboard"
@@ -47,9 +49,10 @@ function App() {
             </PrivateRoute>
           }
         /> */}
-        <Route element={<PrivateRoute/>}>
-          <Route path="/dashboard" element={<Dashboard/>}/>
-          <Route path="/gallerys" element={<Gallerys/>}/>
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/gallerys" element={<Gallerys />} />
+          <Route path="/logout" element={<Logout />} />
         </Route>
         <Route path="*" element={<Navigate to="/index" replace />} />
       </Routes>

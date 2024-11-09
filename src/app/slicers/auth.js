@@ -9,9 +9,14 @@ export const authSlicer = createSlice({
     setAuth: (state, action) => {
       state.value = action.payload;
     },
-    isAuth: (state) => {
-      return true;
-    },
+    // isAuth: (state, action) => {
+    //   console.log(action.payload);
+    //   if (state.value) {
+    //     action.payload.resolve();
+    //   } else {
+    //     action.payload.reject();
+    //   }
+    // },
   },
 });
 export const userSlicer = createSlice({

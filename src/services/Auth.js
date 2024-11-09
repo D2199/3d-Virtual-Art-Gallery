@@ -42,7 +42,7 @@ export async function getUser(token) {
     throw e;
   }
 }
-export async function getAuthToken(data) {
+export async function getAuthToken(data, resolve) {
   console.log(data);
   // const dispatcher = useDispatch();
   try {
@@ -58,7 +58,7 @@ export async function getAuthToken(data) {
       const jsonData = await response.json();
       localStorage.setItem("token", jsonData.token);
       // dispatcher(setAuth(jsonData.token));
-
+      resolve(jsonData);
       return jsonData;
     } else {
       throw response.text;

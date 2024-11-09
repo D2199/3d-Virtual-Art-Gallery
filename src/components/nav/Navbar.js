@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./styles.css";
+import { useSelector } from "react-redux";
 // import "./script";
 function Navbar() {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
+  const isauth = useSelector((state) => state.auth.value);
   const toggleNavbar = () => {
     setNavbarOpen(!navbarOpen);
   };
@@ -26,18 +28,28 @@ function Navbar() {
           <li>
             <Link to="/index">Home</Link>
           </li>
-          <li>
-            <Link to="/gallerys">Gallerys</Link>
-          </li>
+
           <li>
             <Link to="/explore">Explore</Link>
           </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to={"/dashboard"}>Dashboard</Link>
-          </li>
+
+          {isauth ? (
+            <>
+              <li>
+                <Link to="/gallerys">Gallerys</Link>
+              </li>
+              <li>
+                <Link to={"/dashboard"}>Dashboard</Link>
+              </li>
+              <li>
+                <Link to={"/logout"}>Logout</Link>
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+          )}
         </ul>
       </div>
     </nav>

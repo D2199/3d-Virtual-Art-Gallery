@@ -20,10 +20,29 @@ import Buttons from "../utils/Buttons";
 import { ArtInfo } from "../artInfo/ArtInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedArt } from "../../app/slicers/selectedArt";
+import { useParams } from "react-router-dom";
 
 // await import("./image.png");
 // import url from "./art.jpg";
+const checkCollision = (camera, rooms) => {
+  // console.log(room.children);
+  const raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
 
+  const intersects = raycaster.intersectObjects(
+    rooms ? rooms.children : []
+    // scene && scene.children.filter((c) => c.name == "Room")[0].children
+  );
+  // console.log(scene.children.filter((c) => c.name == "Room")[0]);
+  for (let intersect of intersects) {
+    if (intersect.distance < 5) {
+      console.log("intersect");
+      return true;
+    } else {
+      return false;
+    }
+  }
+};
 function Wall({ texture, position, rotation }) {
   //   const loader = new TextureLoader();
   //   const texture = loader.load(
@@ -94,10 +113,11 @@ function Room({ wallImage, floorImage, scale }) {
   const wallTexture = useTexture((new Image().src = wallImage));
   const floorTexture = useTexture((new Image().src = floorImage));
   const controls = useRef();
-  const speed = 2;
+  const speed = 1;
   const { camera, scene } = useThree();
   const [intersectionResults, setIntersectionResults] = useState([]);
-  let roomChild;
+  // const room = scene.children.filter((c) => c.name == "Room")[0].children;
+  let roomChild = useRef();
   // useMemo(() => {});
   // useEffect(() => {
   //   roomChild = scene.children.filter((c) => c.name == "Room")[0].children;
@@ -130,55 +150,38 @@ function Room({ wallImage, floorImage, scale }) {
   // checkIntersections();
   // console.log("camera.moves");
   // });
-  const checkCollision = () => {
-    const raycaster = new THREE.Raycaster();
-    raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
-    const intersects = raycaster.intersectObjects(
-      (roomChild = scene.children.filter((c) => c.name == "Room")[0].children)
-    );
-    // console.log(scene.children.filter((c) => c.name == "Room")[0]);
-    for (let intersect of intersects) {
-      if (intersect.distance < 5) {
-        console.log("intersect");
-        return true;
-      } else {
-        return false;
-      }
-    }
-  };
+
   useEffect(() => {
     // const walls = scene.children.filter((e) => e.name == "Room")[0];
 
     // camera.position.copy(previousPosition);
-    document.addEventListener("keydown", (e) => {
+
+    const event = document.addEventListener("keydown", (e) => {
       const previousPosition = camera.position.clone();
+      const control = controls.current;
       if (e.key == "ArrowUp") {
-        controls.current.moveForward(0.1 * speed);
+        control && controls.current.moveForward(0.1 * speed);
       }
       if (e.key == "ArrowDown") {
-        controls.current.moveForward(-0.1 * speed);
+        control && controls.current.moveForward(-0.1 * speed);
       }
       if (e.key == "ArrowRight") {
-        controls.current.moveRight(0.1 * speed);
+        control && controls.current.moveRight(0.1 * speed);
       }
       if (e.key == "ArrowLeft") {
-        controls.current.moveRight(-0.1 * speed);
+        control && controls.current.moveRight(-0.1 * speed);
       }
-      if (checkCollision()) {
+      if (checkCollision(camera, roomChild.current)) {
         camera.position.copy(previousPosition); // reset the camera position to the previous position. The `previousPosition` variable is a clone of the camera position before the movement. We use `copy` instead of `set` because `set` will set the position to the same object, so if we change the previousPosition, the camera position will also change. `copy` creates a new object with the same values as the previousPosition.
       }
     });
     return () => {
-      document.removeEventListener("keydown", this);
+      document.removeEventListener("keydown", event);
     };
     // Foo(controls, speed);
-  }, []);
+  });
   return (
-    <group
-      scale={scale}
-      name="Room"
-      // ref={room}
-    >
+    <group scale={scale} name="Room" ref={roomChild}>
       <PointerLockControls
         // onLock={checkIntersections()}
         selector="canvas"
@@ -263,36 +266,59 @@ function GalleryTest() {
   const DataContext = useData();
   const context = useContext(DataContext);
   const selectedArt = useSelector((state) => state.selectedArt.value);
-
+  const { galleryId } = useParams();
   // const [selected]
   useEffect(() => {
     console.log(context.selected);
   }, [context.selected]);
-  const arts = [
-    {
-      art: "https://images.pexels.com/photos/159862/art-school-of-athens-raphael-italian-painter-fresco-159862.jpeg?auto=compress&cs=tinysrgb&w=600",
-      position: [5, 0, -10],
-      name: "art1",
-      discription: "some disctiption",
-      author: "ditto",
-      owner: "deva",
-      price: 100,
-      scale: [1.5, 1.5, 1],
+  let arts;
+  arts =
+    galleryId == 2
+      ? [
+          {
+            art: "https://images.pexels.com/photos/795693/pexels-photo-795693.jpeg?auto=compress&cs=tinysrgb&w=600",
 
-      // rotation: [],
-    },
-    {
-      art: "https://images.pexels.com/photos/795693/pexels-photo-795693.jpeg?auto=compress&cs=tinysrgb&w=600",
+            name: "art2",
+            description: "some disctiption",
+            author: "ditto",
+            owner: "deva",
+            price: 100,
+            scale: { x: 1.5, y: 1, z: 1 },
+            position: { x: 0, y: 0, z: -10 },
+          },
+        ]
+      : [
+          {
+            art: "https://images.pexels.com/photos/159862/art-school-of-athens-raphael-italian-painter-fresco-159862.jpeg?auto=compress&cs=tinysrgb&w=600",
+            position: { x: 5, y: 0, z: -10 },
+            name: "art1",
+            description: "some disctiption",
+            author: "ditto",
+            owner: "deva",
+            price: 100,
+            scale: { x: 1.5, y: 1.5, z: 1 },
 
-      name: "art2",
-      discription: "some disctiption",
-      author: "ditto",
-      owner: "deva",
-      price: 100,
-      scale: [1.5, 1, 1],
-      position: [0, 0, -10],
-    },
-  ];
+            // rotation: [],
+          },
+        ];
+  // useEffect(() => {
+  //   galleryId == 2 &&
+  //     setArts([
+  //       // ...arts,
+  //       {
+  //         art: "https://images.pexels.com/photos/795693/pexels-photo-795693.jpeg?auto=compress&cs=tinysrgb&w=600",
+
+  //         name: "art2",
+  //         description: "some disctiption",
+  //         author: "ditto",
+  //         owner: "deva",
+  //         price: 100,
+  //         scale: { x: 1.5, y: 1, z: 1 },
+  //         position: { x: 0, y: 0, z: -10 },
+  //       },
+  //     ]);
+  //   // return () => {};
+  // });
 
   return (
     <>
@@ -310,9 +336,15 @@ function GalleryTest() {
           <Art
             key={index}
             texture={(new Image().src = value.art)}
-            position={value.position}
-            rotation={value.rotation}
-            scale={value.scale}
+            // position={[value.position.x, value.position.y, value.position.z]}
+            // rotation={[value.rotation.x, value.rotation.y, value.rotation.z]}
+            position-z={value.position.z}
+            position-y={value.position.y}
+            position-x={value.position.x}
+            // scale={[value.scale.x, value.scale.y, value.scale.z]}
+            scale-x={value.scale.x}
+            scale-y={value.scale.y}
+            scale-z={value.scale.z}
             information={value}
             setSelected={context.setSelected}
           />

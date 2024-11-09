@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import Gallery from "../scene/Gallery";
+// import Gallery from "../../../../Gallery";
 import Buttons from "../utils/Buttons";
 import GalleryTest from "./galleryTest";
 import { redirect, useNavigate, useParams } from "react-router-dom";
@@ -36,7 +36,7 @@ function Gallery() {
     if (typeof id == "number") {
       if (id > 0) {
         // console.log(id--);
-        navigator(`/gallerys/${id - 1}`);
+        navigator(`/gallery/${id - 1}`);
       }
     }
   };
@@ -46,14 +46,14 @@ function Gallery() {
     if (typeof id == "number") {
       if (id < 50) {
         // console.log("/gallerys/" + id + 1);
-        navigator(`/gallerys/${id + 1}`);
+        navigator(`/gallery/${id + 1}`);
       }
     }
   };
-  useEffect(async () => {
-    const gallery = getGallery(galleryId);
-    const arts = getArtsByGallery(galleryId);
-  }, []);
+  // useEffect(async () => {
+  //   const gallery = getGallery(galleryId);
+  //   const arts = getArtsByGallery(galleryId);
+  // }, []);
   return (
     <div
       style={{

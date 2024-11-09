@@ -6,6 +6,8 @@
   padding: 16px;
   margin-bottom: 16px;
   transition: box-shadow 0.3s ease-in-out;
+  text-wrap: wrap;
+  word-wrap: break-word;
 }
 
 .card:hover {

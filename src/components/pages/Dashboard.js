@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import Gallery from "../scene/Gallery";
+// import Gallery from "../../../../Gallery";
 import Room from "../scene/Room";
 import Settings from "../settings/Settings";
 import "./Dashstyle.css";

@@ -1,8 +1,11 @@
-import React, { useContext, useEffect } from "react";
-import "./style.css";
+import React, { useContext, useEffect, useState } from "react";
+import style from "./style.module.css";
 import Buttons from "../../components/utils/Buttons";
 import { useData } from "../../contexts";
 import { updateGallery } from "../../services/GallerysServ";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSelectedArt } from "../../app/slicers/selectedArt";
+import { useFetcher } from "react-router-dom";
 function Settings() {
   // const seleted = art.forEach((element) => {
   //   return element.seleted ? element : { name: "art2", seleted: true };
@@ -12,6 +15,23 @@ function Settings() {
   // }, [seleted]);
   const DataContext = useData();
   const context = useContext(DataContext);
+  const dispacher = useDispatch();
+  const selectedArt = useSelector((state) => state.selectedArt.value);
+  const [createdArt, setCreatedArt] = useState({
+    img: "file",
+    name: "art name",
+    description: "description about your art",
+    price: 0,
+  });
+  const artCreateForm = new FormData();
+  // const form=useFetcher({
+
+  // })
+  useEffect(() => {
+    // !selectedArt ? setClear(null) : setClear(false);
+    // console.log(clear);
+  }, [selectedArt]);
+  // selectedArt = selectedArt ? selectedArt : {};
   // context.setSelected;
   // context.setGallery({ ...context.gallery, name: name });
   const GalleryForm = new FormData();
@@ -28,13 +48,15 @@ function Settings() {
     // console.log(GalleryForm);
     // updateGallery(GalleryForm).then;
   }
+  const styles = { color: "white" };
   return (
-    <div className="setCon">
+    <div className={style.setCon}>
       <details>
         <summary>Gallery Settings</summary>
-        <div className="form-item">
+        <div className={style.formItem}>
           <lable>Name</lable>
           <input
+            className={style.Inputs}
             name="name"
             placeholder="name"
             onChange={(e) => {
@@ -46,11 +68,12 @@ function Settings() {
             }}
           />
         </div>
-        <div className="form-item">
-          <lable>Discription</lable>
+        <div className={style.formItem} style={styles}>
+          <lable>Description</lable>
           <textarea
-            name="discription"
-            placeholder="discription"
+            className={style.Inputs}
+            name="description"
+            placeholder="description"
 
             // onChange={(e) => {
             //   console.log(e.target.value);
@@ -61,9 +84,10 @@ function Settings() {
             // }}
           />
         </div>
-        <div className="form-item">
+        <div className={style.formItem}>
           <lable>Wall Texture</lable>
           <input
+            className={style.Inputs}
             onChange={(e) => {
               context.setGallery({
                 ...context.gallery,
@@ -74,9 +98,10 @@ function Settings() {
             type="file"
           />
         </div>
-        <div className="form-item">
+        <div className={style.formItem}>
           <lable>Floor Texture</lable>
           <input
+            className={style.Inputs}
             onChange={(e) => {
               context.setGallery({
                 ...context.gallery,
@@ -87,9 +112,10 @@ function Settings() {
             type="file"
           />
         </div>
-        <div className="form-item">
+        <div className={style.formItem}>
           <lable>Celling Texture</lable>
           <input
+            className={style.Inputs}
             onChange={(e) => {
               context.setGallery({
                 ...context.gallery,
@@ -100,12 +126,13 @@ function Settings() {
             type="file"
           />
         </div>
-        <div className="form-item">
+        <div className={style.formItem}>
           <lable>Scale</lable>
-          <div className="positionInputs">
+          <div className={style.Inputs3D}>
             <span>
               X
               <input
+                className={style.Inputs}
                 onChange={(e) => {
                   context.setGallery({
                     ...context.gallery,
@@ -122,11 +149,12 @@ function Settings() {
             </span>
 
             {/* <span>
-              Y <input type="number" max={Math.PI * 2} min={0} />
+              Y <input className={style.Inputs} type="number" max={Math.PI * 2} min={0} />
             </span> */}
             <span>
               Z{" "}
               <input
+                className={style.Inputs}
                 onChange={(e) => {
                   context.setGallery({
                     ...context.gallery,
@@ -143,7 +171,7 @@ function Settings() {
             </span>
           </div>
         </div>
-        <div className="form-item">
+        <div className={style.formItem}>
           <Buttons
             action={() => {
               console.log(context.gallery);
@@ -156,46 +184,138 @@ function Settings() {
       </details>
       <details>
         <summary>Art settings</summary>
-        <div className="form-item">
+        <div className={style.formItem}>
           <lable>Art </lable>
-          <input onChange={(e) => console.log(e.target.value)} type="file" />
+          <input className={style.Inputs} onChange={(e) => {}} type="file" />
         </div>
-        <div className="form-item">
+        <div className={style.formItem}>
           <label>Name</label>
-          <input onChange={(e) => console.log(e.target.value)} type="text" />
+          <input
+            className={style.Inputs}
+            value={selectedArt?.name}
+            style={style.input}
+            onChange={(e) => {
+              console.log(selectedArt);
+              dispacher(updateSelectedArt({ name: e.target.value }));
+            }}
+            type="text"
+          />
         </div>
-        <div className="form-item">
+        <div className={style.formItem}>
+          <label>Description</label>
+          <input
+            maxLength={100}
+            className={style.Inputs}
+            value={selectedArt?.description}
+            onChange={(e) => {
+              dispacher(updateSelectedArt({ description: e.target.value }));
+            }}
+            type="text"
+          />
+        </div>
+        <div className={style.formItem}>
+          <label>Price</label>
+          <input
+            className={style.Inputs}
+            value={selectedArt?.price}
+            onChange={(e) =>
+              dispacher(updateSelectedArt({ price: e.target.value }))
+            }
+            type="number"
+          />
+        </div>
+        <div className={style.formItem}>
           <lable>Position</lable>
-          <div className="positionInputs">
+          <div className={style.Inputs3D}>
             <span>
-              X <input type="number" max={Math.PI * 2} min={0} />
+              X{" "}
+              <input
+                className={style.Inputs}
+                type="number"
+                max={Math.PI * 2}
+                min={0}
+                onChange={(e) =>
+                  dispacher(
+                    updateSelectedArt({
+                      position: { ...selectedArt.position, x: e.target.value },
+                    })
+                  )
+                }
+              />
             </span>
 
             <span>
-              Y <input type="number" max={Math.PI * 2} min={0} />
+              Y{" "}
+              <input
+                className={style.Inputs}
+                type="number"
+                max={Math.PI * 2}
+                min={0}
+                onChange={(e) =>
+                  dispacher(
+                    updateSelectedArt({
+                      position: { ...selectedArt.position, y: e.target.value },
+                    })
+                  )
+                }
+              />
             </span>
             <span>
-              Z <input type="number" max={Math.PI * 2} min={0} />
+              Z{" "}
+              <input
+                className={style.Inputs}
+                type="number"
+                max={Math.PI * 2}
+                min={0}
+                onChange={(e) =>
+                  dispacher(
+                    updateSelectedArt({
+                      position: { ...selectedArt.position, z: e.target.value },
+                    })
+                  )
+                }
+              />
             </span>
           </div>
         </div>
-        <div className="form-item">
+        <div className={style.formItem}>
           <lable>Rotation</lable>
-          <div className="rotateInputs">
+          <div className={style.Inputs3D}>
             <span>
-              X <input type="number" max={Math.PI * 2} min={0} />
+              X{" "}
+              <input
+                className={style.Inputs}
+                type="number"
+                max={Math.PI * 2}
+                min={0}
+                onChange={(e) =>
+                  dispacher(updateSelectedArt({ rotation: [e.target.value] }))
+                }
+              />
             </span>
 
             <span>
-              Y <input type="number" max={Math.PI * 2} min={0} />
+              Y{" "}
+              <input
+                className={style.Inputs}
+                type="number"
+                max={Math.PI * 2}
+                min={0}
+              />
             </span>
             <span>
-              Z <input type="number" max={Math.PI * 2} min={0} />
+              Z{" "}
+              <input
+                className={style.Inputs}
+                type="number"
+                max={Math.PI * 2}
+                min={0}
+              />
             </span>
           </div>
         </div>
-        <div className="form-item">
-          {context.selected ? (
+        <div className={style.formItem}>
+          {selectedArt ? (
             <Buttons onClick={() => {}}>edit</Buttons>
           ) : (
             <Buttons>Add</Buttons>

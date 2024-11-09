@@ -5,13 +5,16 @@ import BackEffects from "../utils/BackEffects";
 import { OrbitControls } from "@react-three/drei";
 import { useNavigate } from "react-router-dom";
 import { getAuthToken } from "../../services/Auth";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth } from "../../app/slicers/auth";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [showing, setShowing] = useState(false);
-
+  const dispatcher = useDispatch();
+  const [showing, setShowing] = useState(true);
+  const isauth = useSelector((state) => state.auth.value);
   const handleLogin = async () => {
     // const form = new FormData();
     // form.append("username", username);
@@ -20,15 +23,23 @@ function Login() {
     // const isAuthenticated =
     //   email === "user@example.com" && password === "password";
 
-    const token = await getAuthToken(JSON.stringify({ username, password }));
-    if (token) {
-      console.log(token.token);
-      // Store authentication token or user data in local storage or state
-      // localStorage.setItem("token", token);
-      navigate("/dashboard"); // Redirect to dashboard or any other protected route
-    } else {
-      alert("Invalid username or password. Please try again.");
-    }
+    const token = await getAuthToken(
+      JSON.stringify({ username, password }),
+      ({ token }) => {
+        dispatcher(setAuth(token));
+        console.log("reduxState:", isauth);
+        // localStorage.setItem('token',token)
+        navigate("/gallerys");
+      }
+    );
+    // if (token) {
+    //   console.log(token.token);
+    //   // Store authentication token or user data in local storage or state
+    //   // localStorage.setItem("token", token);
+    //   navigate("/dashboard"); // Redirect to dashboard or any other protected route
+    // } else {
+    //   alert("Invalid username or password. Please try again.");
+    // }
   };
   const handleRegister = async () => {};
   return (

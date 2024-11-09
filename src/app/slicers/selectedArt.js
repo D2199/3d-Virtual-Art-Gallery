@@ -9,8 +9,12 @@ export const selectedArtSlicer = createSlice({
     setSelectedArt: (state, action) => {
       state.value = action.payload;
     },
+    updateSelectedArt: (state, action) => {
+      state.value &&= { ...state.value, ...action.payload };
+      console.log(state.value);
+    },
   },
 });
-export const { setSelectedArt } = selectedArtSlicer.actions;
+export const { setSelectedArt, updateSelectedArt } = selectedArtSlicer.actions;
 
 export default selectedArtSlicer.reducer;
